@@ -4,14 +4,17 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const app = express();
+const path = require ('path')
 const socket = require("socket.io");
 require("dotenv").config();
 
-app.use(cors({
-  origin: ["http://localhost:3000", "http:// chat-app-react-nodejs-master"]
-}));
+app.use(cors());
 app.use(express.json());
-
+// static file
+app.use(express.static(path.join(__dirname,'./public/build')))
+app.get('*', function(req,res){
+  res.sendFile(path.join(__dirname, "./public/build"))
+})
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
